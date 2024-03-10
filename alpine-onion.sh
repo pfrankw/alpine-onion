@@ -24,8 +24,8 @@ echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/ip_forward.conf
 iptables -F
 iptables -t nat -F
 
-iptables -P OUTPUT ACCEPT
-iptables -P INPUT ACCEPT
+iptables -P OUTPUT DROP
+iptables -P INPUT DROP
 iptables -P FORWARD DROP
 
 iptables -t nat -A PREROUTING -i eth1 -p udp --dport 53 -j REDIRECT --to-ports 5353
