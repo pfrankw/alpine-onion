@@ -18,7 +18,7 @@ apk update
 apk add tor iptables nyx
 
 echo -e "auto lo\niface lo inet loopback\n\nauto eth0\niface eth0 inet dhcp\n\nauto eth1\niface eth1 inet static\n\taddress 10.152.152.10\n\tnetmask 255.255.255.0" > /etc/network/interfaces
-echo -e "VirtualAddrNetworkIPv4 10.192.0.0/10\nAutomapHostsOnResolve 1\nTransPort 10.152.152.10:9040\nDNSPort 10.152.152.10:5353" > /etc/tor/torrc
+echo -e "VirtualAddrNetworkIPv4 10.192.0.0/10\nAutomapHostsOnResolve 1\nTransPort 10.152.152.10:9040\nDNSPort 10.152.152.10:5353\nControlPort unix:/var/run/tor/control RelaxDirModeCheck" > /etc/tor/torrc
 echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/ip_forward.conf
 
 iptables -F
