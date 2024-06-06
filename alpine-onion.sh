@@ -20,7 +20,7 @@ apk add tor iptables nyx dhcp
 echo -e "auto lo\niface lo inet loopback\n\nauto eth0\niface eth0 inet dhcp\n\nauto eth1\niface eth1 inet static\n\taddress 10.152.152.10\n\tnetmask 255.255.255.0" > /etc/network/interfaces
 echo -e "VirtualAddrNetworkIPv4 10.192.0.0/10\nAutomapHostsOnResolve 1\nTransPort 10.152.152.10:9040\nDNSPort 10.152.152.10:5353\nControlPort unix:/var/run/tor/control RelaxDirModeCheck" > /etc/tor/torrc
 #echo -e "port=0\ndhcp-range=10.152.152.11,10.152.152.200,12h\ndhcp-option=option:router,10.152.152.10\ndhcp-option=option:dns-server,10.152.152.10\ndhcp-lease-max=150\ndhcp-leasefile=/var/lib/misc/dnsmasq.leases" > /etc/dnsmasq.conf
-sudo cat <<EOF > /etc/dhcp/dhcpd.conf
+cat <<EOF > /etc/dhcp/dhcpd.conf
 # Option definitions common to all supported networks...
 option domain-name "example.org";
 option domain-name-servers 10.152.152.10;
