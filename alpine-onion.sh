@@ -32,11 +32,17 @@ iptables -P FORWARD DROP
 iptables -t nat -A PREROUTING -i eth1 -p udp --dport 53 -j REDIRECT --to-ports 5353
 iptables -t nat -A PREROUTING -i eth1 -p tcp --syn -j REDIRECT --to-ports 9040
 
+# only tor user can exit
 iptables -A OUTPUT -m owner --uid-owner $(id -u tor) -j ACCEPT
 iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-iptables -A INPUT -d 10.152.152.10 -p tcp --dport 9040 -j ACCEPT
-iptables -A INPUT -d 10.152.152.10 -p udp --dport 5353 -j ACCEPT
-iptables -A INPUT -d 10.152.152.10 -p udp --dport 67 -j ACCEPT
+# tor daemon
+iptables -A INPUT -s 10.152.152.0/24 -d 10.152.152.10 -p tcp --dport 9040 -j ACCEPT
+iptables -A INPUT -s 10.152.152.0/24 -d 10.152.152.10 -p udp --dport 5353 -j ACCEPT
+# dhcp
+iptables -A INPUT -s 0.0.0.0 -p udp --sport 68 -d 255.255.255.255 --dport 67 -j ACCEPT
+iptables -A INPUT -s 0.0.0.0 -p udp --sport 68 -d 10.152.152.10 --dport 67 -j ACCEPT
+iptables -A INPUT -s 10.152.152.0/24 -p udp --sport 68 -d 10.152.152.10 --dport 67 -j ACCEPT
+iptables -A OUTPUT -s 10.152.152.10 -p udp --sport 67 -d 10.152.152.0/24 --dport 68 -j ACCEPT
 
 rc-update add iptables
 rc-service iptables save
